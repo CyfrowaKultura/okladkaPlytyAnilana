@@ -1,0 +1,599 @@
+:root {
+    --bg-color: #0f172a;
+    --text-color: #f8fafc;
+    --album-width: 400px;
+    --album-height: 400px;
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --panel-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(to right, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: #94a3b8;
+}
+
+/* 3D SCENE */
+.scene {
+    width: calc(var(--album-width) * 2);
+    height: var(--album-height);
+    perspective: 1500px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+
+.album {
+    width: var(--album-width);
+    height: var(--album-height);
+    position: relative;
+    transform-style: preserve-3d;
+    /* Lekkie obrócenie całej sceny, by było widać 3D od razu */
+    transform: rotateX(15deg) rotateY(-10deg);
+}
+
+/* Połówki albumu */
+.album-half {
+    position: absolute;
+    top: 0;
+    width: var(--album-width);
+    height: var(--album-height);
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.right-half {
+    left: 0; /* right-half jest bazą, zostaje na miejscu */
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.left-half {
+    position: absolute;
+    top: 0;
+    left: -400px;
+    width: 400px;
+    height: 100%;
+    transform-origin: right center;
+    transform-style: preserve-3d;
+    transition: transform 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 2;
+}
+
+/* Grzbiet */
+.spine-wrapper {
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 20px;
+    height: 100%;
+    transform-origin: right center;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 3;
+}
+
+.spine-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    border: 1px solid var(--panel-border);
+}
+
+/* Otwieranie okładki - grzbiet i skrzydło lewe */
+.album.is-open .spine-wrapper {
+    transform: rotateY(0deg);
+}
+
+.album.is-open .left-half {
+    transform: rotateY(0deg);
+}
+
+/* Kiedy zamknięte - kąt dodatni oznacza zgięcie "do siebie" (do wewnątrz okładki) */
+.album:not(.is-open) .spine-wrapper {
+    transform: rotateY(90deg);
+}
+
+.album:not(.is-open) .left-half {
+    transform: rotateY(90deg);
+}
+
+/* Ścianki (Faces) */
+.face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    /* Usunięte overflow: hidden, aby harmonijka i CD mogły wystawać! */
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.face > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 4px; /* Dodane aby zachować zaokrąglone rogi bez overflow:hidden */
+}
+
+.placeholder-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.placeholder-content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #cbd5e1;
+}
+
+.placeholder-content p {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 0.5rem;
+}
+
+.placeholder-content code {
+    background: rgba(0,0,0,0.5);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    color: #38bdf8;
+}
+
+.click-hint {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: white;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
+
+/* Pozycjonowanie poszczególnych ścianek */
+/* FRONT COVER now faces -Z, so rotateY(180deg) */
+.face.front-cover {
+    transform: rotateY(180deg) translateZ(1px);
+    cursor: pointer;
+}
+
+/* INSIDE LEFT now faces +Z, so no rotation! */
+.face.inside-left {
+    transform: translateZ(1px);
+}
+
+.face.inside-right {
+    transform: translateZ(1px);
+}
+
+.face.back-cover {
+    transform: rotateY(180deg) translateZ(1px);
+}
+
+/* KIESZONKA NA KSIĄŻECZKĘ */
+.pocket-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: transparent; /* Usunięta nieprzezroczystość/kolor */
+    backdrop-filter: none; /* Usunięty efekt rozmycia */
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 20;
+    pointer-events: none; /* Żeby można było klikać pod nią */
+}
+
+/* Półkole wycięte na górze kieszonki */
+.pocket-cutout {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: none;
+    border-radius: 0 0 50px 50px;
+    box-shadow: inset 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.pocket-text {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* HARMONIJKA (KSIĄŻECZKA) NA PRAWEJ STRONIE */
+.accordion-wrapper {
+    position: absolute;
+    top: 7.5%; /* Wycentrowane w pionie (zajmuje 85% wysokości) */
+    left: 2%; /* Przesunięte bliżej środka, by nie wystawało po złożeniu */
+    width: 85%; /* Minimalnie mniejsze, żeby zmieściły się zagięcia */
+    aspect-ratio: 1/1; /* Kwadrat */
+    z-index: 10;
+    transform-style: preserve-3d;
+    transform: translateZ(2px); /* Delikatnie odsunięte od tła, by zapobiec przenikaniu */
+}
+
+/* PŁYTA CD W KIESZONCE */
+.cd-disc {
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
+    width: 80%;
+    aspect-ratio: 1/1;
+    background: url('images/cd_label.jpg') center/cover no-repeat;
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(-5%) translateZ(10px); /* Płyta przeniesiona wyżej */
+}
+
+.cd-disc.is-pulled-out {
+    transform: translateY(-80%) translateZ(15px); /* Płyta wyjeżdża wyżej do góry */
+}
+
+.cd-hole {
+    width: 20%;
+    height: 20%;
+    background: #000000;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Nadruk na kieszonce - dolna połowa płyty */
+.pocket-cd-print {
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
+    width: 80%;
+    aspect-ratio: 1/1;
+    background: url('images/cd_label.jpg') center/cover no-repeat;
+    border-radius: 50%;
+    transform: translateY(-5%) translateZ(12px); /* Delikatnie przed samą płytą */
+    clip-path: inset(50% 0 0 0); /* Obcięte od góry - zostaje tylko dolna połowa */
+    z-index: 15;
+    pointer-events: none;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cd-text {
+    position: absolute;
+    top: 20%;
+    font-weight: 800;
+    color: rgba(255,255,255,0.3);
+    font-size: 1.5rem;
+}
+
+.acc-panel {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #334155, #1e293b);
+    border: 1px solid rgba(255,255,255,0.1);
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+}
+
+.acc-panel.p1 {
+    left: 0; /* P1 jest bazą w wrapperze */
+    transform: rotateY(0deg); 
+}
+
+/* Złożony stan (harmonijka) - kąt zmieniony na 179 aby uniknąć za dużych odstępów przy dużej skali */
+.acc-panel.p2, .acc-panel.p4 {
+    transform: rotateY(-179deg);
+}
+.acc-panel.p3 {
+    transform: rotateY(179deg);
+}
+
+/* Rozłożony stan */
+.accordion-wrapper.is-unfolded .acc-panel.p2,
+.accordion-wrapper.is-unfolded .acc-panel.p4 {
+    transform: rotateY(-15deg); /* Lekki zygzak zamiast 0deg dla efektu 3D */
+}
+.accordion-wrapper.is-unfolded .acc-panel.p3 {
+    transform: rotateY(15deg);
+}
+
+.acc-front, .acc-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden; /* Dodane dla Safari i poprawnego ukrywania tekstu */
+    backface-visibility: hidden;
+    background: linear-gradient(135deg, #334155, #1e293b);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #e2e8f0;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.acc-front {
+    transform: rotateY(0deg) translateZ(1px);
+}
+
+.acc-back {
+    transform: rotateY(180deg) translateZ(1px);
+}
+
+.acc-front img, .acc-back img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.placeholder-text {
+    position: relative;
+    z-index: 2;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Ukrywanie etykiet - klasa dodawana przez JS */
+body.hide-labels .placeholder-content,
+body.hide-labels .placeholder-text,
+body.hide-labels .pocket-text,
+body.hide-labels .cd-text,
+body.hide-labels .click-hint {
+    display: none !important;
+    opacity: 0 !important;
+}
+
+/* KONTROLKI (PRZYCISKI) */
+.controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   NOWOCZESNA TYPOGRAFIA (FRONT COVER)
+   ========================================= */
+
+.front-cover {
+    overflow: hidden; /* Ucinamy teksty w tle, które wychodzą poza krawędź */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+}
+
+/* Tło typograficzne (teraz na tyle okładki) */
+.back-cover {
+    background-color: #000000;
+    overflow: hidden; /* żeby napisy nie wychodziły poza tył okładki */
+}
+
+.typo-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.dance-word {
+    position: absolute;
+    color: #ffffff;
+    font-weight: 800;
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+}
+
+/* Obiekty 3D na tyle okładki (z-index musi być wyższy niż typo-bg) */
+.element-ciupaga {
+    position: absolute;
+    bottom: -10%;
+    right: 5%;
+    width: 25%;
+    height: auto;
+    z-index: 10;
+    transform: rotate(15deg) translateZ(15px);
+    filter: drop-shadow(10px 10px 15px rgba(0,0,0,0.8));
+    pointer-events: none;
+}
+
+.element-kierpce {
+    position: absolute;
+    top: -5%;
+    left: 10%;
+    width: 45%;
+    height: auto;
+    z-index: 12;
+    transform: translateZ(20px);
+    filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.9));
+    pointer-events: none;
+}
+
+
+/* =========================================
+   NOWOCZESNA TYPOGRAFIA (FRONT COVER)
+   ========================================= */
+
+.front-cover {
+    overflow: hidden;
+    position: relative;
+    background-color: #000000;
+}
+
+/* Główna Typografia */
+.typo-main {
+    position: relative;
+    z-index: 20;
+    width: 90%;
+    text-align: right; /* Asymetryczny nowoczesny układ do prawej */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.typo-subtitle {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    color: #cbd5e1;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.typo-title {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    /* Delikatny cień dla oddzielenia od tła i kierpców */
+    text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.typo-patron {
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    border-top: 1px solid rgba(255,255,255,0.2);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+/* Obrazek na środku */
+.front-element-kierpce {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateZ(10px); 
+    width: 70%; 
+    height: auto;
+    z-index: 10; /* Za typografią */
+    filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.9));
+    pointer-events: none;
+}
