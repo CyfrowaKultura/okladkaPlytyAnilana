@@ -1,0 +1,5 @@
+# Ignoruj surowe zdjęcia z aparatu z metadanymi
+*.JPG
+*.jpg
+!okladka_3d/images/*.jpg
+!okladka_3d/images/*.png
