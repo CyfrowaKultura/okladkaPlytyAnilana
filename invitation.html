@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zaproszenie - ANILANA 3D</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;500;800&display=swap');
+        
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+        }
+
+        .container {
+            text-align: center;
+            padding: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .container::before, .container::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #cbd5e1;
+            opacity: 0.5;
+        }
+
+        .container::before {
+            top: -10px;
+            left: -10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .container::after {
+            bottom: -10px;
+            right: -10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 10px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 0.9rem;
+            letter-spacing: 0.4em;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-bottom: 50px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .highlight {
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .github-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 40px;
+            background-color: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 0.8rem;
+            color: #475569;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ANILANA</h1>
+        <h2>ZESPÓŁ PIEŚNI I TAŃCA</h2>
+        
+        <p>Mamy zaszczyt zaprezentować innowacyjny projekt wirtualnej okładki płyty CD stworzonej dla Zespołu Pieśni i Tańca ANILANA im. Leszka Woszczyńskiego.</p>
+        
+        <p>Pozwala on na pełne doświadczenie albumu w przestrzeni cyfrowej, z płynną możliwością swobodnego obracania, podglądu z każdej perspektywy oraz interaktywną rozkładaną harmonijką ze zdjęciami zespołu.</p>
+        
+        <p style="margin-top: 40px; font-weight: 500; font-size: 1.2rem; color: #ffffff;">Krystian Ledzion</p>
+
+        <a href="https://cyfrowakultura.github.io/okladkaPlytyAnilana/" class="github-link">Otwórz wirtualną okładkę</a>
+
+        <div class="footer">CYFROWA KULTURA &copy; 2026</div>
+    </div>
+</body>
+</html>
