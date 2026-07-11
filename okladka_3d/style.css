@@ -587,15 +587,16 @@ button:disabled {
     margin-top: 0.5rem;
 }
 
-/* Obrazek na środku */
-.front-element-kierpce {
+/* Obrazek CD na przodzie okładki */
+.front-element-cd {
     position: absolute;
-    top: 65%; /* Przesunięto w dół */
-    left: 70%; /* Przesunięto mocno w prawo */
+    top: 70%; 
+    left: 40%;
     transform: translate(-50%, -50%) translateZ(10px); 
     width: 70%; 
     height: auto;
     z-index: 10; /* Za typografią */
     filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.9));
     pointer-events: none;
+    border-radius: 50%; /* Zakładając, że nadruk jest okrągły, choć to grafika wycięta z CD */
 }

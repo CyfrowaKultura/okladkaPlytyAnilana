@@ -4,11 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const cdDisc = document.getElementById('cd-disc');
     
     const btnToggleCover = document.getElementById('btn-toggle-cover');
+    const btnFlipCover = document.getElementById('btn-flip-cover');
     const btnTogglePullout = document.getElementById('btn-toggle-pullout');
     const btnUnfoldBooklet = document.getElementById('btn-unfold-booklet');
     const btnToggleLabels = document.getElementById('btn-toggle-labels');
     
     let isCoverOpen = false;
+    let isFlipped = false;
     let isCdPulledOut = false;
     let isBookletUnfolded = false;
     let areLabelsHidden = true;
@@ -32,6 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
             isCoverOpen = true;
             btnTogglePullout.disabled = false;
             btnUnfoldBooklet.disabled = false;
+            btnFlipCover.disabled = true;
+            
+            // Jeśli była odwrócona, resetujemy kąt przy otwieraniu
+            if (isFlipped) {
+                isFlipped = false;
+                currentRotY -= 180;
+                album.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
+            }
         }
     };
 
@@ -41,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isCoverOpen = false;
         btnTogglePullout.disabled = true;
         btnUnfoldBooklet.disabled = true;
+        btnFlipCover.disabled = false;
     };
 
     // 2. Wysuwanie / Wsuwanie płyty
@@ -80,6 +91,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     btnToggleCover.addEventListener('click', toggleCover);
+    
+    btnFlipCover.addEventListener('click', () => {
+        if (!isCoverOpen) {
+            isFlipped = !isFlipped;
+            currentRotY += 180;
+            album.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
+        }
+    });
+
     btnTogglePullout.addEventListener('click', () => togglePullOut());
     btnUnfoldBooklet.addEventListener('click', () => toggleUnfold());
     
