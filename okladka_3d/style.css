@@ -521,9 +521,9 @@ button:disabled {
 
 .element-kierpce {
     position: absolute;
-    top: -5%;
-    left: 10%;
-    width: 45%;
+    bottom: -15%;
+    left: -15%;
+    width: 60%;
     height: auto;
     z-index: 12;
     transform: translateZ(20px);
@@ -590,13 +590,13 @@ button:disabled {
 /* Obrazek CD na przodzie okładki */
 .front-element-cd {
     position: absolute;
-    top: 70%; 
-    left: 40%;
-    transform: translate(-50%, -50%) translateZ(10px); 
-    width: 70%; 
+    bottom: -25%; 
+    right: -25%;
+    transform: translateZ(10px); 
+    width: 75%; 
     height: auto;
     z-index: 10; /* Za typografią */
     filter: drop-shadow(15px 25px 25px rgba(0,0,0,0.9));
     pointer-events: none;
-    border-radius: 50%; /* Zakładając, że nadruk jest okrągły, choć to grafika wycięta z CD */
+    border-radius: 50%; 
 }
