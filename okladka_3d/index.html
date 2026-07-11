@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interaktywna Okładka 3D - Wykrojnik</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=4">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
+
 <body>
     <div class="app-container">
         <header>
@@ -15,7 +17,7 @@
 
         <div class="scene">
             <div class="album" id="album">
-                
+
                 <!-- Prawa strona okładki (baza) -->
                 <div class="album-half right-half">
                     <!-- Tył (Bottom Right) -->
@@ -25,15 +27,20 @@
                             <p>images/back.jpg</p>
                         </div>
                         <img src="images/back.jpg" alt="Tył" onerror="this.style.opacity=0">
-                        
+
                         <!-- Tło typograficzne (przeniesione z przodu) -->
                         <div class="typo-bg" id="typo-bg"></div>
-                        
+
                         <!-- Elementy 3D na tyle -->
                         <img src="images/ciupaga.png" class="element-ciupaga" alt="Ciupaga">
-                        <img src="images/kierpce.png" class="element-kierpce" alt="Kierpce">
+                        <img src="images/kierpce.png" class="element-kierpce" alt="Kierpce"
+                            style="bottom: -40% !important; right: -40% !important; top: auto !important; left: auto !important;">
+
+                        <!-- Element CD w lewym górnym rogu tyłu (kopia z przodu, obrócona) -->
+                        <img src="images/cd_label.png" class="front-element-cd" alt="CD Top Left Back"
+                            style="top: -50% !important; left: -60% !important; bottom: auto !important; right: auto !important; transform: rotate(180deg) translateZ(10px) !important;">
                     </div>
-                    
+
                     <!-- Wnętrze Prawe (Top Left) -->
                     <div class="face inside-right">
                         <div class="placeholder-content">
@@ -42,41 +49,70 @@
                         </div>
                         <img src="images/inside_right.jpg" alt="Środek Prawa" onerror="this.style.opacity=0">
                     </div>
-                    
+
                     <!-- Harmonijka przeniesiona POZA .face, by nie znikała przy obracaniu -->
                     <div class="accordion-wrapper" id="accordion">
                         <div class="acc-panel p1">
-                            <div class="acc-front"><img src="images/acc_1_front.jpg" alt="Harmonijka 1 Przód" onerror="this.style.opacity=0"><div class="placeholder-text">H1 Przód</div></div>
-                            <div class="acc-back"><img src="images/acc_1_back.jpg" alt="Harmonijka 1 Tył" onerror="this.style.opacity=0"><div class="placeholder-text">H1 Tył</div></div>
-                            
+                            <div class="acc-front"><img src="images/acc_1_front.jpg" alt="Harmonijka 1 Przód"
+                                    onerror="this.style.opacity=0">
+                                <div class="placeholder-text">H1 Przód</div>
+                            </div>
+                            <div class="acc-back"><img src="images/acc_1_back.jpg" alt="Harmonijka 1 Tył"
+                                    onerror="this.style.opacity=0">
+                                <div class="placeholder-text">H1 Tył</div>
+                            </div>
+
                             <div class="acc-panel p2">
-                                <div class="acc-front"><img src="images/acc_2_front.jpg" alt="Harmonijka 2 Przód" onerror="this.style.opacity=0"><div class="placeholder-text">H2 Przód</div></div>
-                                <div class="acc-back"><img src="images/acc_2_back.jpg" alt="Harmonijka 2 Tył" onerror="this.style.opacity=0"><div class="placeholder-text">H2 Tył</div></div>
-                                
+                                <div class="acc-front"><img src="images/acc_2_front.jpg" alt="Harmonijka 2 Przód"
+                                        onerror="this.style.opacity=0">
+                                    <div class="placeholder-text">H2 Przód</div>
+                                </div>
+                                <div class="acc-back"><img src="images/acc_2_back.jpg" alt="Harmonijka 2 Tył"
+                                        onerror="this.style.opacity=0">
+                                    <div class="placeholder-text">H2 Tył</div>
+                                </div>
+
                                 <div class="acc-panel p3">
-                                    <div class="acc-front"><img src="images/acc_3_front.jpg" alt="Harmonijka 3 Przód" onerror="this.style.opacity=0"><div class="placeholder-text">H3 Przód</div></div>
-                                    <div class="acc-back"><img src="images/acc_3_back.jpg" alt="Harmonijka 3 Tył" onerror="this.style.opacity=0"><div class="placeholder-text">H3 Tył</div></div>
-                                    
+                                    <div class="acc-front"><img src="images/acc_3_front.jpg" alt="Harmonijka 3 Przód"
+                                            onerror="this.style.opacity=0">
+                                        <div class="placeholder-text">H3 Przód</div>
+                                    </div>
+                                    <div class="acc-back"><img src="images/acc_3_back.jpg" alt="Harmonijka 3 Tył"
+                                            onerror="this.style.opacity=0">
+                                        <div class="placeholder-text">H3 Tył</div>
+                                    </div>
+
                                     <div class="acc-panel p4">
-                                        <div class="acc-front"><img src="images/acc_4_front.jpg" alt="Harmonijka 4 Przód" onerror="this.style.opacity=0"><div class="placeholder-text">H4 Przód</div></div>
-                                        <div class="acc-back"><img src="images/acc_4_back.jpg" alt="Harmonijka 4 Tył" onerror="this.style.opacity=0"><div class="placeholder-text">H4 Tył</div></div>
+                                        <div class="acc-front"><img src="images/acc_4_front.jpg"
+                                                alt="Harmonijka 4 Przód" onerror="this.style.opacity=0">
+                                            <div class="placeholder-text">H4 Przód</div>
+                                        </div>
+                                        <div class="acc-back"><img src="images/acc_4_back.jpg" alt="Harmonijka 4 Tył"
+                                                onerror="this.style.opacity=0">
+                                            <div class="placeholder-text">H4 Tył</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Grzbiet i lewa strona okładki -->
                 <div class="spine-wrapper">
                     <div class="spine-face"></div>
-                    
+
                     <!-- Lewa strona okładki (okładka przednia) -->
                     <div class="album-half left-half" id="cover">
                         <!-- Tył lewej strony (Front okładki) -->
                         <div class="face front-cover">
-                            <!-- Element CD na dole -->
-                            <img src="images/cd_label.jpg" class="front-element-cd" alt="CD">
+                            <!-- Element CD na dole po prawej -->
+                            <img src="images/cd_label.jpg" class="front-element-cd" alt="CD Bottom Right"
+                                style="bottom: -50% !important; right: -60% !important; top: auto !important; left: auto !important;">
+
+                            <!-- Element CD w lewym górnym rogu (symetrycznie) -->
+                            <img src="images/cd_label.jpg" class="front-element-cd" alt="CD Top Left"
+                                style="top: -50% !important; left: -60% !important; bottom: auto !important; right: auto !important; transform: rotate(180deg) translateZ(10px) !important;">
 
                             <!-- Główna typografia -->
                             <div class="typo-main">
@@ -85,36 +121,36 @@
                                 <div class="typo-patron">im. Leszka Woszczyńskiego</div>
                             </div>
                         </div>
-                    
-                    <!-- Wnętrze Lewe (Top Right) z kieszonką -->
-                    <div class="face inside-left">
-                        <div class="placeholder-content">
-                            <h2>Środek Lewa</h2>
-                            <p>images/inside_left.jpg</p>
-                        </div>
-                        <img src="images/inside_left.jpg" alt="Środek Lewa" onerror="this.style.opacity=0">
-                        <!-- Płyta CD w kieszonce -->
-                        <div class="cd-disc" id="cd-disc">
-                            <div class="cd-hole"></div>
-                            <span class="cd-text">CD</span>
-                        </div>
 
-                        <!-- Nadruk na kieszonce (dolna połowa płyty) -->
-                        <div class="pocket-cd-print">
-                            <div class="cd-hole"></div>
-                        </div>
+                        <!-- Wnętrze Lewe (Top Right) z kieszonką -->
+                        <div class="face inside-left">
+                            <div class="placeholder-content">
+                                <h2>Środek Lewa</h2>
+                                <p>images/inside_left.jpg</p>
+                            </div>
+                            <img src="images/inside_left.jpg" alt="Środek Lewa" onerror="this.style.opacity=0">
+                            <!-- Płyta CD w kieszonce -->
+                            <div class="cd-disc" id="cd-disc">
+                                <div class="cd-hole"></div>
+                                <span class="cd-text">CD</span>
+                            </div>
 
-                        <!-- Górna część kieszonki (przykrywa płytę) -->
-                        <div class="pocket-overlay">
-                            <div class="pocket-cutout"></div>
-                            <div class="pocket-text">Kieszonka na płytę</div>
+                            <!-- Nadruk na kieszonce (dolna połowa płyty) -->
+                            <div class="pocket-cd-print">
+                                <div class="cd-hole"></div>
+                            </div>
+
+                            <!-- Górna część kieszonki (przykrywa płytę) -->
+                            <div class="pocket-overlay">
+                                <div class="pocket-cutout"></div>
+                                <div class="pocket-text">Kieszonka na płytę</div>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>
         </div>
-            
+
         <!-- Kontrolki -->
 
         <div class="controls">
@@ -126,6 +162,15 @@
         </div>
     </div>
 
+    <!-- Lightbox (Galeria zdjęć z harmonijki) -->
+    <div id="lightbox" class="lightbox">
+        <button id="lightbox-close" class="lightbox-btn lightbox-close">&times;</button>
+        <button id="lightbox-prev" class="lightbox-btn lightbox-prev">&#10094;</button>
+        <img id="lightbox-img" src="" alt="Powiększone zdjęcie">
+        <button id="lightbox-next" class="lightbox-btn lightbox-next">&#10095;</button>
+    </div>
+
     <script src="script.js"></script>
 </body>
+
 </html>

@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isCoverOpen = true;
             btnTogglePullout.disabled = false;
             btnUnfoldBooklet.disabled = false;
-            btnFlipCover.disabled = true;
             
             // Jeśli była odwrócona, resetujemy kąt przy otwieraniu
             if (isFlipped) {
@@ -42,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentRotY -= 180;
                 album.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
             }
+            updateScale();
         }
     };
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isCoverOpen = false;
         btnTogglePullout.disabled = true;
         btnUnfoldBooklet.disabled = true;
-        btnFlipCover.disabled = false;
+        updateScale();
     };
 
     // 2. Wysuwanie / Wsuwanie płyty
@@ -80,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             accordion.classList.remove('is-unfolded');
             isBookletUnfolded = false;
         }
+        updateScale();
     };
 
     // Event Listeners
@@ -146,13 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // JEDNOLITY STYL: wszystko małe, takie samo, bardzo gęste
             wordEl.style.fontSize = '0.5rem';
-            wordEl.style.fontWeight = '400';
-            wordEl.style.opacity = '0.08';
+            wordEl.style.fontWeight = '600';
+            wordEl.style.opacity = '0.3'; // Zwiększona widoczność
             wordEl.style.color = '#ffffff';
             wordEl.style.textTransform = 'uppercase';
             wordEl.style.lineHeight = '1.5';
             wordEl.style.whiteSpace = 'nowrap';
-            wordEl.style.mixBlendMode = 'overlay';
             wordEl.style.letterSpacing = '0.1em';
             
             // Wszystko na tym samym poziomie za ciupagą (brak wybijania z-index, ma być równe tło)
@@ -166,25 +166,46 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicjalizacja tła po załadowaniu
     generateTypoBackground();
 
-    // 4. Obracanie okładki myszką (Drag to Rotate)
+    // 4. Skalowanie na mobile
+    const scene = document.querySelector('.scene');
+    const updateScale = () => {
+        let scale = 1;
+        if (window.innerWidth <= 768) {
+            if (isBookletUnfolded) scale = 0.25;
+            else if (isCoverOpen) scale = 0.45;
+            else scale = 0.55;
+        } else {
+            if (isBookletUnfolded) scale = 0.5;
+            else if (isCoverOpen) scale = 0.8;
+            else scale = 1;
+        }
+        scene.style.transform = `scale(${scale})`;
+    };
+    window.addEventListener('resize', updateScale);
+    updateScale(); // Inicjalizacja
+
+    // 5. Obracanie okładki myszką i dotykiem (Drag to Rotate)
     const album = document.getElementById('album');
     let isDragging = false;
     let startX, startY;
     let currentRotX = 15;
     let currentRotY = -10;
 
-    document.addEventListener('mousedown', (e) => {
+    const startDrag = (e) => {
         if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
         isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
+        startX = e.touches ? e.touches[0].clientX : e.clientX;
+        startY = e.touches ? e.touches[0].clientY : e.clientY;
         document.body.style.cursor = 'grabbing';
-    });
+    };
 
-    document.addEventListener('mousemove', (e) => {
+    const moveDrag = (e) => {
         if (!isDragging) return;
-        const deltaX = e.clientX - startX;
-        const deltaY = e.clientY - startY;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
         
         currentRotY += deltaX * 0.4;
         currentRotX -= deltaY * 0.4;
@@ -194,12 +215,80 @@ document.addEventListener('DOMContentLoaded', () => {
 
         album.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg)`;
         
-        startX = e.clientX;
-        startY = e.clientY;
-    });
+        startX = clientX;
+        startY = clientY;
+    };
 
-    document.addEventListener('mouseup', () => {
+    const endDrag = () => {
         isDragging = false;
         document.body.style.cursor = 'default';
+    };
+
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('touchstart', startDrag, {passive: true});
+    document.addEventListener('mousemove', moveDrag);
+    document.addEventListener('touchmove', moveDrag, {passive: true});
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+
+    // 6. Lightbox (Galeria)
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const btnCloseLightbox = document.getElementById('lightbox-close');
+    const btnPrevLightbox = document.getElementById('lightbox-prev');
+    const btnNextLightbox = document.getElementById('lightbox-next');
+    
+    const galleryImages = [
+        'images/acc_1_front.jpg',
+        'images/acc_2_front.jpg',
+        'images/acc_3_front.jpg',
+        'images/acc_4_front.jpg',
+        'images/acc_4_back.jpg',
+        'images/acc_3_back.jpg',
+        'images/acc_2_back.jpg',
+        'images/acc_1_back.jpg'
+    ];
+    let currentImageIndex = 0;
+
+    const openLightbox = (index) => {
+        currentImageIndex = index;
+        lightboxImg.src = galleryImages[currentImageIndex];
+        lightbox.classList.add('is-active');
+    };
+
+    const closeLightbox = () => {
+        lightbox.classList.remove('is-active');
+    };
+
+    const showPrev = (e) => {
+        if (e) e.stopPropagation();
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        lightboxImg.src = galleryImages[currentImageIndex];
+    };
+
+    const showNext = (e) => {
+        if (e) e.stopPropagation();
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        lightboxImg.src = galleryImages[currentImageIndex];
+    };
+
+    btnCloseLightbox.addEventListener('click', closeLightbox);
+    btnPrevLightbox.addEventListener('click', showPrev);
+    btnNextLightbox.addEventListener('click', showNext);
+    
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    const accImages = document.querySelectorAll('.acc-front img, .acc-back img');
+    accImages.forEach(img => {
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', (e) => {
+            const srcFilename = img.getAttribute('src');
+            const idx = galleryImages.indexOf(srcFilename);
+            if (idx !== -1) {
+                openLightbox(idx);
+            }
+        });
     });
 });
